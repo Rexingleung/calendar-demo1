@@ -1,6 +1,6 @@
 import React, { useState, useRef, useEffect, useCallback } from 'react';
 import { ChevronLeft, ChevronRight, Plus, Edit, Trash2 } from 'lucide-react';
-import { CalendarEvent, CalendarDay } from '../types/calendar';
+import { CalendarEvent } from '../types/calendar';
 import { 
   getMonthDays, 
   isSameDay, 
@@ -238,12 +238,12 @@ const CalendarCanvas: React.FC = () => {
     events.filter(event => isSameDay(event.date, selectedDate)) : [];
 
   return (
-    <div className="bg-white rounded-lg shadow-lg p-6">
+    <div className="p-6 bg-white rounded-lg shadow-lg">
       {/* 日历头部导航 */}
       <div className="flex justify-between items-center mb-6">
         <button
           onClick={() => navigateMonth('prev')}
-          className="p-2 rounded-lg hover:bg-gray-100 transition-colors"
+          className="p-2 rounded-lg transition-colors hover:bg-gray-100"
         >
           <ChevronLeft size={20} />
         </button>
@@ -254,7 +254,7 @@ const CalendarCanvas: React.FC = () => {
         
         <button
           onClick={() => navigateMonth('next')}
-          className="p-2 rounded-lg hover:bg-gray-100 transition-colors"
+          className="p-2 rounded-lg transition-colors hover:bg-gray-100"
         >
           <ChevronRight size={20} />
         </button>
@@ -269,12 +269,12 @@ const CalendarCanvas: React.FC = () => {
           onClick={handleCanvasClick}
           onMouseMove={handleCanvasMouseMove}
           onMouseLeave={handleCanvasMouseLeave}
-          className="border border-gray-300 rounded-lg cursor-pointer"
+          className="rounded-lg border border-gray-300 cursor-pointer"
         />
       </div>
 
       {/* 事件管理区域 */}
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+      <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
         {/* 左侧：选中日期信息 */}
         <div>
           <div className="flex justify-between items-center mb-4">
@@ -286,7 +286,7 @@ const CalendarCanvas: React.FC = () => {
             </h3>
             <button
               onClick={handleAddEvent}
-              className="flex items-center gap-2 px-3 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+              className="flex gap-2 items-center px-3 py-2 text-white bg-blue-600 rounded-lg transition-colors hover:bg-blue-700"
             >
               <Plus size={16} />
               添加事件
@@ -294,28 +294,28 @@ const CalendarCanvas: React.FC = () => {
           </div>
 
           {selectedDayEvents.length > 0 ? (
-            <div className="space-y-2 max-h-64 overflow-y-auto">
+            <div className="overflow-y-auto space-y-2 max-h-64">
               {selectedDayEvents.map(event => (
                 <div
                   key={event.id}
-                  className="p-3 border rounded-lg hover:bg-gray-50 transition-colors"
+                  className="p-3 rounded-lg border transition-colors hover:bg-gray-50"
                   style={{ borderLeftColor: event.color, borderLeftWidth: '4px' }}
                 >
                   <div className="flex justify-between items-start">
                     <div className="flex-1">
                       <h4 className="font-medium text-gray-800">{event.title}</h4>
-                      <p className="text-sm text-gray-600 mt-1">
+                      <p className="mt-1 text-sm text-gray-600">
                         {formatTime(event.startTime)} - {formatTime(event.endTime)}
                       </p>
                       {event.description && (
-                        <p className="text-sm text-gray-500 mt-1">{event.description}</p>
+                        <p className="mt-1 text-sm text-gray-500">{event.description}</p>
                       )}
-                      <div className="flex items-center gap-2 mt-2">
-                        <span className="text-xs px-2 py-1 rounded-full bg-gray-100 text-gray-600">
+                      <div className="flex gap-2 items-center mt-2">
+                        <span className="px-2 py-1 text-xs text-gray-600 bg-gray-100 rounded-full">
                           {getCategoryLabel(event.category)}
                         </span>
                         {event.isReminder && (
-                          <span className="text-xs px-2 py-1 rounded-full bg-yellow-100 text-yellow-700">
+                          <span className="px-2 py-1 text-xs text-yellow-700 bg-yellow-100 rounded-full">
                             提醒
                           </span>
                         )}
@@ -324,13 +324,13 @@ const CalendarCanvas: React.FC = () => {
                     <div className="flex gap-1 ml-2">
                       <button
                         onClick={() => handleEditEvent(event)}
-                        className="p-1 text-gray-500 hover:text-blue-600 transition-colors"
+                        className="p-1 text-gray-500 transition-colors hover:text-blue-600"
                       >
                         <Edit size={14} />
                       </button>
                       <button
                         onClick={() => handleDeleteEvent(event.id)}
-                        className="p-1 text-gray-500 hover:text-red-600 transition-colors"
+                        className="p-1 text-gray-500 transition-colors hover:text-red-600"
                       >
                         <Trash2 size={14} />
                       </button>
@@ -340,7 +340,7 @@ const CalendarCanvas: React.FC = () => {
               ))}
             </div>
           ) : (
-            <div className="text-center text-gray-500 py-8">
+            <div className="py-8 text-center text-gray-500">
               {selectedDate ? '当天没有事件' : '选择一个日期查看事件'}
             </div>
           )}
@@ -348,26 +348,26 @@ const CalendarCanvas: React.FC = () => {
 
         {/* 右侧：即将到来的提醒 */}
         <div>
-          <h3 className="text-lg font-medium text-gray-800 mb-4">即将到来的提醒</h3>
+          <h3 className="mb-4 text-lg font-medium text-gray-800">即将到来的提醒</h3>
           {getUpcomingReminders().length > 0 ? (
-            <div className="space-y-2 max-h-64 overflow-y-auto">
+            <div className="overflow-y-auto space-y-2 max-h-64">
               {getUpcomingReminders().map(event => (
                 <div
                   key={event.id}
-                  className="p-3 border rounded-lg bg-yellow-50 border-yellow-200"
+                  className="p-3 bg-yellow-50 rounded-lg border border-yellow-200"
                 >
                   <h4 className="font-medium text-gray-800">{event.title}</h4>
-                  <p className="text-sm text-gray-600 mt-1">
+                  <p className="mt-1 text-sm text-gray-600">
                     {event.date.getMonth() + 1}月{event.date.getDate()}日 {formatTime(event.startTime)}
                   </p>
                   {event.description && (
-                    <p className="text-sm text-gray-500 mt-1">{event.description}</p>
+                    <p className="mt-1 text-sm text-gray-500">{event.description}</p>
                   )}
                 </div>
               ))}
             </div>
           ) : (
-            <div className="text-center text-gray-500 py-8">
+            <div className="py-8 text-center text-gray-500">
               暂无即将到来的提醒
             </div>
           )}
